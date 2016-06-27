@@ -18,7 +18,17 @@ header {
     width: 25%;
 }
 
+.introSection {
+    text-align: center;
+}
 
+img {
+    max-width: 100%;
+    background-size: contain;
+}
+.textContainer {
+    text-align: left;
+}
 
 .flexbox-container > div:first-child {
     background-color: azure;
@@ -27,6 +37,9 @@ header {
     justify-self: center;
 }
 
+.flexbox-container > div:first-child img {
+    float: right;
+}
 footer {
     background-color: honeydew;
     height: 25px;

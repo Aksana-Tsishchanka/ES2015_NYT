@@ -10,54 +10,65 @@ fetch(url, init)
         return response.json();
     })
     .then(function(json){
-        var mainDiv =  document.querySelector('div.main')
-
-        var divContainer = document.createElement('div');
-        divContainer.className = "flexbox-container";
-
-        let { section, results : arrSections, copyright } = json;
-
-        for(var objSection of arrSections) {
-            divContainer.appendChild(createSection(objSection));
-        }
-        mainDiv.appendChild(divContainer);
-        document.body.appendChild(createFooter(copyright));
-
+        paintSections(json);
     });
 
 
+function paintSections(json) {
+    var mainDiv =  document.querySelector('div.main')
+
+    var divContainer = document.createElement('div');
+    divContainer.className = 'flexbox-container';
+
+    let { section, results : arrSections, copyright } = json;
+
+    for(var objSection of arrSections) {
+        divContainer.appendChild(createSection(objSection));
+    }
+    mainDiv.appendChild(divContainer);
+    document.body.appendChild(createFooter(copyright));
+}
+
 function createSection(objSection) {
-    let { short_url, title, abstract, multimedia, copyright } = objSection;
+    let { short_url, title, abstract, multimedia, byline, published_date } = objSection;
 
     let sectionEl = document.createElement('div');
     sectionEl.className = 'introSection';
 
-    let title-link = `<h2><a href=${short_url}>${title}</a></h2>`;
-
+    let titleLink = `<h2><a href=${short_url}>${title}</a></h2>`;
     let paragraf = `<p>${abstract}</p>`;
+    let time = moment(published_date).fromNow();
+    let signInfo =`<span>${time} ${byline}</span>`;
 
     let textContainer = document.createElement("div");
     textContainer.className = 'textContainer';
-    textContainer.innerHTML = title-link + paragraf;
+    textContainer.innerHTML = titleLink + paragraf + signInfo;
 
-    sectionEl.appendChild(textContainer);
-
-    if ( multimedia != null ) {
-        addMedia(multimedia);
+    if ( multimedia.length > 0) {
+        let { url, height, width, type, caption } = getMedia(multimedia, 'mediumThreeByTwo210');
+        if (type === 'image') {
+         sectionEl.innerHTML = createImage(url, height, width, caption);
+        }
     }
-
+    sectionEl.appendChild(textContainer);
     return sectionEl;
 }
 
-function addMedia(multimediaObj, format) {
+function createImage(url, height, width, caption) {
+    return `<img src=${url} height=${height} width=${width} title=${caption} />`;
+}
 
-//1 find obj wich contains necessary img
+function getMedia(multimediaArr, flag) {
+    for (let i=0; i < multimediaArr.length; i++ ) {
+        if (multimediaArr[i].format === flag) {
+            return  multimediaArr[i];
+        }
+    }
 }
 
 function createFooter(footerText) {
     var footer = document.createElement('footer');
-    //processing regExp
-    footer.textContent = footerText;
+    footer.textContent = footerText.replace('Copyright (c)','©');
     return footer;
 }
 
