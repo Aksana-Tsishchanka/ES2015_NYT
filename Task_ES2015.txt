@@ -1,0 +1,8 @@
+ÅS2015
+1) Register on http://developer.nytimes.com/;
+2) Get access key for one of the APIs of your prefence;
+3) Goto http://developer.nytimes.com/docs/top_stories_api/ (or other one depending on your key);
+4) Using es6 knowledge create an application, which will run purely on the client-side in Chrome-49 browser (no server-side work expected). Your app should get all the news in the available section and display them;
+5) Score points for every usage of the es6, lose points for each incorrect/inconvenient use (like, `hello, world!`) or for prehistoric things (such as XMLHttpRequest);
+6) Styling is not the requirement for this task, but it will be an additional bonus;
+7) You're not allowed to use any framework :)
