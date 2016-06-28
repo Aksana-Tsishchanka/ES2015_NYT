@@ -22,7 +22,12 @@ function paintSections(json) {
 
     let { section, results : arrSections, copyright } = json;
 
-    for(var objSection of arrSections) {
+    let header = document.querySelector('header');
+    let headerSection = document.createElement('h3');
+    headerSection.textContent = section;
+    header.appendChild(headerSection);
+
+    for (var objSection of arrSections) {
         divContainer.appendChild(createSection(objSection));
     }
     mainDiv.appendChild(divContainer);
@@ -38,7 +43,7 @@ function createSection(objSection) {
     let titleLink = `<h2><a href=${short_url}>${title}</a></h2>`;
     let paragraf = `<p>${abstract}</p>`;
     let time = moment(published_date).fromNow();
-    let signInfo =`<span>${time} ${byline}</span>`;
+    let signInfo =`<span class='time'>${time}</span><span class='author'> ${byline}</span>`;
 
     let textContainer = document.createElement("div");
     textContainer.className = 'textContainer';

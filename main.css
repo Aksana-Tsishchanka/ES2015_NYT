@@ -1,7 +1,48 @@
+html {
+    height: 100%;
+}
+
+body {
+    font-family: 'Lora', serif;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+h1,h3 {
+    margin: 0 0;
+    padding: 0 0;
+}
+
+h3:first-letter {
+    text-transform:capitalize;
+    line-height: 1;
+}
+
 header {
-    background-color: cadetblue;
-    width: 100%;
-    height: 50px;
+    background-color: #008B8B;
+    font-family: 'Dancing Script', cursive;
+    font-size: 40px;
+    text-align: center;
+    line-height: 2;
+    border-bottom: 3px solid grey;
+    margin-bottom: 5px;
+}
+
+a {
+    font-family: 'Cormorant SC', serif;
+    color: #00BFFF;
+}
+
+span {
+    color: #778899;
+}
+
+.time {
+    font-style: italic;
+}
+p {
+    font-family: 'Heebo', sans-serif;
 }
 
 .flexbox-container {
@@ -14,8 +55,14 @@ header {
 
 .flexbox-container > div {
     padding: 10px;
-    margin-right: 20px;
+    //margin-right: 20px;
     width: 25%;
+    border-bottom: 1px solid grey;
+    box-shadow: 4px 4px 2px #888888;
+}
+
+.flexbox-container > div:hover {
+    background-color: ;
 }
 
 .introSection {
@@ -30,17 +77,11 @@ img {
     text-align: left;
 }
 
-.flexbox-container > div:first-child {
-    background-color: azure;
-    width: 80%;
-    align-self: center;
-    justify-self: center;
-}
-
-.flexbox-container > div:first-child img {
-    float: right;
-}
 footer {
-    background-color: honeydew;
-    height: 25px;
+    font-family: 'Dancing Script', cursive;
+    background-color: #A9A9A9;
+    line-height: 2;
+    font-size: 20px;
+    border-top: 1px solid grey;
+    margin-top: 5px;
 }
