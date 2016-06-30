@@ -4,7 +4,6 @@
         "react"
     ],
     "rules": {
-        "comma-dangle": ["error", "never"],
         "no-use-before-define": ["error", { "functions": true, "classes": true }]
     }
 }
