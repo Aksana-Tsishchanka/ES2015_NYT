@@ -23,6 +23,10 @@ function createFooter(footerText) {
   footer.textContent = footerText.replace('Copyright (c)', '©');
   return footer;
 }
+function patternDate(interval, difference, infoWord) {
+  const infoText = `${interval} ${infoWord}`;
+  return difference <= 0 ? `in ${infoText}` : `${infoText} ago`;
+}
 
 function timeFrom(date) {
   const difference = new Date() - date;
@@ -30,28 +34,27 @@ function timeFrom(date) {
   let interval = Math.floor(seconds / 31536000);
 
   if (interval > 1) {
-    const infoText = `${interval} years`;
-    return difference <= 0 ? `in ${infoText}` : `${infoText} ago`;
+    return patternDate(interval, difference, 'years');
   }
+
   interval = Math.floor(seconds / 2592000);
   if (interval > 1) {
-    const infoText = `${interval} months`;
-    return difference <= 0 ? `in ${infoText}` : `${infoText}  ago`;
+    return patternDate(interval, difference, 'months');
   }
+
   interval = Math.floor(seconds / 86400);
   if (interval > 1) {
-    const infoText = `${interval} days`;
-    return difference > 0 ? `${infoText} ago` : `in ${infoText}`;
+    return patternDate(interval, difference, 'days');
   }
+
   interval = Math.floor(seconds / 3600);
   if (interval > 1) {
-    const infoText = `${interval} hours`;
-    return difference > 0 ? `${infoText} ago` : `in ${infoText}`;
+    return patternDate(interval, difference, 'hours');
   }
+
   interval = Math.floor(seconds / 60);
   if (interval > 1) {
-    const infoText = `${interval} minutes`;
-    return difference > 0 ? `${infoText} ago` : `in ${infoText}`;
+    return patternDate(interval, difference, 'minutes');
   }
   return 'Just now';
 }
