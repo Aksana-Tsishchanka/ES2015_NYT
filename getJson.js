@@ -1,5 +1,4 @@
 const url = 'https://api.nytimes.com/svc/topstories/v2/travel.json?api-key=36379cbe64354a0e99d3a44d18aa101a';
-/* noinspection Eslint */
 const init = {
   method: 'GET',
   url
@@ -23,40 +22,23 @@ function createFooter(footerText) {
   footer.textContent = footerText.replace('Copyright (c)', '©');
   return footer;
 }
-function patternDate(interval, difference, infoWord) {
-  const infoText = `${interval} ${infoWord}`;
-  return difference <= 0 ? `in ${infoText}` : `${infoText} ago`;
+function calculateDateFrom(seconds, difference, infoWord, measure) {
+  let interval = Math.floor(seconds / measure);
+
+  if (interval > 1) {
+    const infoText = `${interval} ${infoWord}`;
+    return difference <= 0 ? `in ${infoText}` : `${infoText} ago`;
+  }
+
 }
 
 function timeFrom(date) {
   const difference = new Date() - date;
   const seconds = Math.floor(Math.abs(difference) / 1000);
-  let interval = Math.floor(seconds / 31536000);
 
-  if (interval > 1) {
-    return patternDate(interval, difference, 'years');
-  }
-
-  interval = Math.floor(seconds / 2592000);
-  if (interval > 1) {
-    return patternDate(interval, difference, 'months');
-  }
-
-  interval = Math.floor(seconds / 86400);
-  if (interval > 1) {
-    return patternDate(interval, difference, 'days');
-  }
-
-  interval = Math.floor(seconds / 3600);
-  if (interval > 1) {
-    return patternDate(interval, difference, 'hours');
-  }
-
-  interval = Math.floor(seconds / 60);
-  if (interval > 1) {
-    return patternDate(interval, difference, 'minutes');
-  }
-  return 'Just now';
+  return calculateDateFrom(seconds, difference, 'years', 31536000) || calculateDateFrom(seconds,difference, 'months', 2592000) ||
+           calculateDateFrom(seconds, difference, 'days', 86400) || calculateDateFrom(seconds, difference, 'hours', 3600) ||
+           calculateDateFrom(seconds, difference, 'minutes', 60) || 'Just now';
 }
 
 function createSection(objSection) {
