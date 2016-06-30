@@ -24,16 +24,48 @@ function createFooter(footerText) {
   return footer;
 }
 
+function timeFrom(date) {
+  const difference = new Date() - date;
+  const seconds = Math.floor(Math.abs(difference) / 1000);
+  let interval = Math.floor(seconds / 31536000);
+
+  if (interval > 1) {
+    const infoText = `${interval} years`;
+    return difference <= 0 ? `in ${infoText}` : `${infoText} ago`;
+  }
+  interval = Math.floor(seconds / 2592000);
+  if (interval > 1) {
+    const infoText = `${interval} months`;
+    return difference <= 0 ? `in ${infoText}` : `${infoText}  ago`;
+  }
+  interval = Math.floor(seconds / 86400);
+  if (interval > 1) {
+    const infoText = `${interval} days`;
+    return difference > 0 ? `${infoText} ago` : `in ${infoText}`;
+  }
+  interval = Math.floor(seconds / 3600);
+  if (interval > 1) {
+    const infoText = `${interval} hours`;
+    return difference > 0 ? `${infoText} ago` : `in ${infoText}`;
+  }
+  interval = Math.floor(seconds / 60);
+  if (interval > 1) {
+    const infoText = `${interval} minutes`;
+    return difference > 0 ? `${infoText} ago` : `in ${infoText}`;
+  }
+  return 'Just now';
+}
+
 function createSection(objSection) {
-  const { short_url: shortUrl, title, abstract, multimedia, byline, published_date } = objSection;
+  const { short_url: shortUrl, title, abstract, multimedia, byline, published_date: publishedDate } = objSection;
   const sectionEl = document.createElement('div');
   sectionEl.className = 'introSection';
   sectionEl.setAttribute('onclick', `window.location='${shortUrl}';`);
 
   const titleLink = `<h2>${title}</a></h2>`;
   const paragraf = `<p>${abstract}</p>`;
-  //const time = timeFrom(published_date);
-  const signInfo = `<span class='time'>${time}</span><span class='author'> ${byline}</span>`;
+  const timeAgo = timeFrom(new Date(publishedDate));
+  const signInfo = `<span class='time'>${timeAgo}</span><span class='author'> ${byline}</span>`;
 
   const textContainer = document.createElement('div');
   textContainer.className = 'textContainer';
@@ -62,7 +94,7 @@ function addSections(json) {
     divContainer.appendChild(createSection(objSection));
   }
 
-  const mainDiv = document.querySelector('div.main')
+  const mainDiv = document.querySelector('div.main');
   mainDiv.appendChild(divContainer);
 
   document.body.appendChild(createFooter(copyright));
@@ -79,11 +111,3 @@ function success(response) {
 fetch(url, init)
   .then(success)
   .then(processJson);
-
-
-
-
-
-
-
-
