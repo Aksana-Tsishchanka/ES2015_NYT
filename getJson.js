@@ -5,16 +5,18 @@ const init = {
 };
 const imageType = 'mediumThreeByTwo210';
 
-function createImage( src, height, width, caption) {
+function createImage(src, height, width, caption) {
   return `<img src=${src} height=${height} width=${width} title='${caption}' />`;
 }
 
 function getMedia(multimediaArr, flag) {
+  let media;
   for (let i = 0; i < multimediaArr.length; i++) {
     if (multimediaArr[i].format === flag) {
-      return multimediaArr[i];
+      media = multimediaArr[i];
     }
   }
+  return media;
 }
 
 function createFooter(footerText) {
@@ -22,11 +24,10 @@ function createFooter(footerText) {
 }
 
 function calculateDateFrom(seconds, difference, timeArr) {
-  debugger;
   let result;
-  for (let timeObj of timeArr) {
-    let { infoText, numOfSeconds } = timeObj;
-    let interval = Math.floor(seconds / numOfSeconds);
+  for (const timeObj of timeArr) {
+    const { infoText, numOfSeconds } = timeObj;
+    const interval = Math.floor(seconds / numOfSeconds);
 
     if (interval >= 1) {
       result = difference <= 0 ? `in ${interval} ${infoText}` : `${interval} ${infoText} ago`;
@@ -39,26 +40,28 @@ function calculateDateFrom(seconds, difference, timeArr) {
 function timeFrom(date) {
   const difference = new Date() - date;
   const seconds = Math.floor(Math.abs(difference) / 1000);
-  let timeArr = [
+  const timeArr = [
     { infoText: 'years', numOfSeconds: 31536000 },
     { infoText: 'months', numOfSeconds: 2592000 },
     { infoText: 'days', numOfSeconds: 86400 },
     { infoText: 'hours', numOfSeconds: 3600 },
     { infoText: 'minutes', numOfSeconds: 60 },
-   ];
+  ];
 
   return calculateDateFrom(seconds, difference, timeArr) || 'Just now';
 }
 
 function createSection(objSection) {
-  const { short_url: shortUrl, title, abstract, multimedia, byline, published_date: publishedDate } = objSection;
+  const { short_url: shortUrl, title, abstract, multimedia, byline,
+      published_date: publishedDate } = objSection;
 
   const titleLink = `<h2>${title}</h2>`;
   const paragraph = `<p>${abstract}</p>`;
   const timeAgo = timeFrom(new Date(publishedDate));
   const signInfo = `<span class='time'>${timeAgo}</span><span class='author'> ${byline}</span>`;
 
-  const textContainer = `<div classname='textContainer'>${titleLink} ${paragraph} ${signInfo}</div>`;
+  const textContainer = `<div class='textContainer'>${titleLink} ${paragraph}
+                        ${signInfo}</div>`;
   let image;
   if (multimedia.length > 0) {
     const { url: src, height, width, type, caption } = getMedia(multimedia, imageType);
@@ -67,7 +70,8 @@ function createSection(objSection) {
     }
   }
   const eventAction = `window.location='${shortUrl}';`;
-  const sectionEl =`<div class="introSection" onclick=${eventAction}>${image} ${textContainer}</div>`;
+  const sectionEl = `<div class="introSection" onclick=${eventAction}>${image}
+                     ${textContainer}</div>`;
   return sectionEl;
 }
 
@@ -79,7 +83,7 @@ function addSections(json) {
 
   let allSections = '';
 
-  for (let objSection of arrSections) {
+  for (const objSection of arrSections) {
     allSections += createSection(objSection);
   }
 
