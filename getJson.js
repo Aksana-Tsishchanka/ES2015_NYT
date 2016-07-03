@@ -20,28 +20,34 @@ function getMedia(multimediaArr, flag) {
 function createFooter(footerText) {
   return `<footer>${footerText.replace('Copyright (c)', '©')}</footer>`;
 }
-function calculateDateFrom(seconds, difference, obj) {
-  let { infoText, numOfSeconds } = obj;
-  let interval = Math.floor(seconds / numOfSeconds);
 
-  if (interval >=1) {
-    return difference <= 0 ? `in ${interval} ${infoText}` : `${interval} ${infoText} ago`;
+function calculateDateFrom(seconds, difference, timeArr) {
+  debugger;
+  let result;
+  for (let timeObj of timeArr) {
+    let { infoText, numOfSeconds } = timeObj;
+    let interval = Math.floor(seconds / numOfSeconds);
+
+    if (interval >= 1) {
+      result = difference <= 0 ? `in ${interval} ${infoText}` : `${interval} ${infoText} ago`;
+      break;
+    }
   }
-
+  return result;
 }
 
 function timeFrom(date) {
   const difference = new Date() - date;
   const seconds = Math.floor(Math.abs(difference) / 1000);
-  let years = { infoText: 'years', numOfSeconds: 31536000 } ;
-  let months = { infoText: 'months', numOfSeconds: 2592000 };
-  let days = { infoText: 'days', numOfSeconds: 86400 };
-  let hours = { infoText: 'hours', numOfSeconds: 3600 };
-  let minutes ={ infoText: 'minutes', numOfSeconds: 60 };
+  let timeArr = [
+    { infoText: 'years', numOfSeconds: 31536000 },
+    { infoText: 'months', numOfSeconds: 2592000 },
+    { infoText: 'days', numOfSeconds: 86400 },
+    { infoText: 'hours', numOfSeconds: 3600 },
+    { infoText: 'minutes', numOfSeconds: 60 },
+   ];
 
-  return calculateDateFrom(seconds, difference, 'years', 31536000) || calculateDateFrom(seconds,difference, 'months', 2592000) ||
-           calculateDateFrom(seconds, difference, 'days', 86400) || calculateDateFrom(seconds, difference, 'hours', 3600) ||
-           calculateDateFrom(seconds, difference, 'minutes', 60) || 'Just now';
+  return calculateDateFrom(seconds, difference, timeArr) || 'Just now';
 }
 
 function createSection(objSection) {
