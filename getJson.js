@@ -5,8 +5,8 @@ const init = {
 };
 const imageType = 'mediumThreeByTwo210';
 
-function createImage(src, height, width, caption) {
-  return `<img src=${src} height=${height} width=${width} title=${caption} />`;
+function createImage( src, height, width, caption) {
+  return `<img src=${src} height=${height} width=${width} title='${caption}' />`;
 }
 
 function getMedia(multimediaArr, flag) {
@@ -18,16 +18,14 @@ function getMedia(multimediaArr, flag) {
 }
 
 function createFooter(footerText) {
-  const footer = document.createElement('footer');
-  footer.textContent = footerText.replace('Copyright (c)', '©');
-  return footer;
+  return `<footer>${footerText.replace('Copyright (c)', '©')}</footer>`;
 }
-function calculateDateFrom(seconds, difference, infoWord, measure) {
-  let interval = Math.floor(seconds / measure);
+function calculateDateFrom(seconds, difference, obj) {
+  let { infoText, numOfSeconds } = obj;
+  let interval = Math.floor(seconds / numOfSeconds);
 
-  if (interval > 1) {
-    const infoText = `${interval} ${infoWord}`;
-    return difference <= 0 ? `in ${infoText}` : `${infoText} ago`;
+  if (interval >=1) {
+    return difference <= 0 ? `in ${interval} ${infoText}` : `${interval} ${infoText} ago`;
   }
 
 }
@@ -35,6 +33,11 @@ function calculateDateFrom(seconds, difference, infoWord, measure) {
 function timeFrom(date) {
   const difference = new Date() - date;
   const seconds = Math.floor(Math.abs(difference) / 1000);
+  let years = { infoText: 'years', numOfSeconds: 31536000 } ;
+  let months = { infoText: 'months', numOfSeconds: 2592000 };
+  let days = { infoText: 'days', numOfSeconds: 86400 };
+  let hours = { infoText: 'hours', numOfSeconds: 3600 };
+  let minutes ={ infoText: 'minutes', numOfSeconds: 60 };
 
   return calculateDateFrom(seconds, difference, 'years', 31536000) || calculateDateFrom(seconds,difference, 'months', 2592000) ||
            calculateDateFrom(seconds, difference, 'days', 86400) || calculateDateFrom(seconds, difference, 'hours', 3600) ||
@@ -43,56 +46,48 @@ function timeFrom(date) {
 
 function createSection(objSection) {
   const { short_url: shortUrl, title, abstract, multimedia, byline, published_date: publishedDate } = objSection;
-  const sectionEl = document.createElement('div');
-  sectionEl.className = 'introSection';
-  sectionEl.setAttribute('onclick', `window.location='${shortUrl}';`);
 
-  const titleLink = `<h2>${title}</a></h2>`;
-  const paragraf = `<p>${abstract}</p>`;
+  const titleLink = `<h2>${title}</h2>`;
+  const paragraph = `<p>${abstract}</p>`;
   const timeAgo = timeFrom(new Date(publishedDate));
   const signInfo = `<span class='time'>${timeAgo}</span><span class='author'> ${byline}</span>`;
 
-  const textContainer = document.createElement('div');
-  textContainer.className = 'textContainer';
-  textContainer.innerHTML = titleLink + paragraf + signInfo;
-
+  const textContainer = `<div classname='textContainer'>${titleLink} ${paragraph} ${signInfo}</div>`;
+  let image;
   if (multimedia.length > 0) {
     const { url: src, height, width, type, caption } = getMedia(multimedia, imageType);
     if (type === 'image') {
-      sectionEl.innerHTML = createImage(src, height, width, caption);
+      image = createImage(src, height, width, caption);
     }
   }
-  sectionEl.appendChild(textContainer);
+  const eventAction = `window.location='${shortUrl}';`;
+  const sectionEl =`<div class="introSection" onclick=${eventAction}>${image} ${textContainer}</div>`;
   return sectionEl;
 }
 
 function addSections(json) {
   const { section, results: arrSections, copyright } = json;
 
-  const divContainer = document.createElement('div');
-  divContainer.className = 'flexbox-container';
+  const header = `<header><h1>The New York Times News</h1>
+                    <h3>${section}</h3></header>`;
 
-  const header = document.querySelector('header');
-  header.innerHTML += `<h3>${section}</h3>`;
+  let allSections = '';
 
   for (let objSection of arrSections) {
-    divContainer.appendChild(createSection(objSection));
+    allSections += createSection(objSection);
   }
 
-  const mainDiv = document.querySelector('div.main');
-  mainDiv.appendChild(divContainer);
+  const divContainer = `<div class='flexbox-container'>${allSections}</div>`;
+  const footer = createFooter(copyright);
 
-  document.body.appendChild(createFooter(copyright));
+  document.body.innerHTML = `${header} ${divContainer} ${footer}`;
 }
 
 function processJson(json) {
   addSections(json);
 }
 
-function success(response) {
-  return response.json();
-}
 
 fetch(url, init)
-  .then(success)
+  .then(response => response.json())
   .then(processJson);
