@@ -41,11 +41,11 @@ function timeFrom(date) {
   const difference = new Date() - date;
   const seconds = Math.floor(Math.abs(difference) / 1000);
   const timeArr = [
-    { infoText: 'years', numOfSeconds: 31536000 },
-    { infoText: 'months', numOfSeconds: 2592000 },
-    { infoText: 'days', numOfSeconds: 86400 },
-    { infoText: 'hours', numOfSeconds: 3600 },
-    { infoText: 'minutes', numOfSeconds: 60 },
+    { infoText: 'years', numOfSeconds: 60 * 60 * 24 * 365 },
+    { infoText: 'months', numOfSeconds: 60 * 60 * 24 * 30 },
+    { infoText: 'days', numOfSeconds: 60 * 60 * 24 },
+    { infoText: 'hours', numOfSeconds: 60 * 60 },
+    { infoText: 'minutes', numOfSeconds: 60 * 1 },
   ];
 
   return calculateDateFrom(seconds, difference, timeArr) || 'Just now';
@@ -69,9 +69,9 @@ function createSection(objSection) {
       image = createImage(src, height, width, caption);
     }
   }
-  const eventAction = `window.location='${shortUrl}';`;
-  const sectionEl = `<div class="introSection" onclick=${eventAction}>${image}
-                     ${textContainer}</div>`;
+
+  const sectionEl = `<div class="introSection"><a href="${shortUrl}" ><div>${image}
+                     ${textContainer}</div></a></div>`;
   return sectionEl;
 }
 
