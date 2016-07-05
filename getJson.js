@@ -62,7 +62,7 @@ function createSection(objSection) {
 
   const textContainer = `<div class='textContainer'>${titleLink} ${paragraph}
                         ${signInfo}</div>`;
-  let image;
+  let image = '';
   if (multimedia.length > 0) {
     const { url: src, height, width, type, caption } = getMedia(multimedia, imageType);
     if (type === 'image') {
