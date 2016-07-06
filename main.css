@@ -45,7 +45,8 @@ span {
     justify-content: center;
 }
 
-.flexbox-container > .introSection {
+.flexbox-container > .intro-section {
+    text-align: center;
     padding: 10px 15px;
     width: 25%;
     border-bottom: 1px solid LightGray;
@@ -53,7 +54,7 @@ span {
     cursor: pointer;
 }
 
-.introSection a {
+.intro-section a {
     color: black;
     text-decoration: none;
 }
@@ -66,18 +67,19 @@ span {
     background-color: #F0FFFF;
 }
 
-.introSection {
-    text-align: center;
+.text-container {
+    text-align: left;
+
 }
 
 img {
     max-width: 100%;
     background-size: contain;
 }
-.textContainer {
-    text-align: left;
+.text-container {
+
 }
-.introSection:hover h2 {
+.intro-section:hover h2 {
     text-decoration: underline;
 }
 

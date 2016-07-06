@@ -10,13 +10,7 @@ function createImage(src, height, width, caption) {
 }
 
 function getMedia(multimediaArr, flag) {
-  let media;
-  for (let i = 0; i < multimediaArr.length; i++) {
-    if (multimediaArr[i].format === flag) {
-      media = multimediaArr[i];
-    }
-  }
-  return media;
+  return multimediaArr.filter(mediaObj => mediaObj.format === flag)[0];
 }
 
 function createFooter(footerText) {
@@ -24,17 +18,18 @@ function createFooter(footerText) {
 }
 
 function calculateDateFrom(seconds, difference, timeArr) {
-  let result;
-  for (const timeObj of timeArr) {
+
+  return timeArr.reduce((result, timeObj ) => {
+    if (result) return result;
+
     const { infoText, numOfSeconds } = timeObj;
     const interval = Math.floor(seconds / numOfSeconds);
 
     if (interval >= 1) {
       result = difference <= 0 ? `in ${interval} ${infoText}` : `${interval} ${infoText} ago`;
-      break;
     }
-  }
-  return result;
+    return result;
+  }, '');
 }
 
 function timeFrom(date) {
@@ -55,13 +50,6 @@ function createSection(objSection) {
   const { short_url: shortUrl, title, abstract, multimedia, byline,
       published_date: publishedDate } = objSection;
 
-  const titleLink = `<h2>${title}</h2>`;
-  const paragraph = `<p>${abstract}</p>`;
-  const timeAgo = timeFrom(new Date(publishedDate));
-  const signInfo = `<span class='time'>${timeAgo}</span><span class='author'> ${byline}</span>`;
-
-  const textContainer = `<div class='textContainer'>${titleLink} ${paragraph}
-                        ${signInfo}</div>`;
   let image = '';
   if (multimedia.length > 0) {
     const { url: src, height, width, type, caption } = getMedia(multimedia, imageType);
@@ -70,27 +58,30 @@ function createSection(objSection) {
     }
   }
 
-  const sectionEl = `<div class="introSection"><a href="${shortUrl}" ><div>${image}
-                     ${textContainer}</div></a></div>`;
+  const sectionEl = `<div class="intro-section">
+                       <a href="${shortUrl}" >
+                       <div>
+                         ${image}
+                         <div class='text-container'>
+                            <h2>${title}</h2>
+                            <p>${abstract}</p>
+                            <span class='time'>${timeFrom(new Date(publishedDate))}</span>
+                            <span class='author'> ${byline}</span>
+                         </div>
+                       </div>
+                       </a>
+                     </div>`;
   return sectionEl;
 }
 
 function addSections(json) {
   const { section, results: arrSections, copyright } = json;
-
-  const header = `<header><h1>The New York Times News</h1>
-                    <h3>${section}</h3></header>`;
-
-  let allSections = '';
-
-  for (const objSection of arrSections) {
-    allSections += createSection(objSection);
-  }
-
-  const divContainer = `<div class='flexbox-container'>${allSections}</div>`;
-  const footer = createFooter(copyright);
-
-  document.body.innerHTML = `${header} ${divContainer} ${footer}`;
+  document.body.innerHTML = `<header>
+                               <h1>The New York Times News</h1>
+                               <h3>${section}</h3></header>
+                               <div class='flexbox-container'>
+                                 ${arrSections.reduce((result, el) => result + createSection(el),'')}</div>
+                             ${createFooter(copyright)}`;
 }
 
 function processJson(json) {
