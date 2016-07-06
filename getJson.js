@@ -40,7 +40,7 @@ function timeFrom(date) {
     { infoText: 'months', numOfSeconds: 60 * 60 * 24 * 30 },
     { infoText: 'days', numOfSeconds: 60 * 60 * 24 },
     { infoText: 'hours', numOfSeconds: 60 * 60 },
-    { infoText: 'minutes', numOfSeconds: 60 * 1 },
+    { infoText: 'minutes', numOfSeconds: 60 },
   ];
 
   return calculateDateFrom(seconds, difference, timeArr) || 'Just now';
