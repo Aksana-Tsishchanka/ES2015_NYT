@@ -18,8 +18,7 @@ function createFooter(footerText) {
 }
 
 function calculateDateFrom(seconds, difference, timeArr) {
-
-  return timeArr.reduce((result, timeObj ) => {
+  return timeArr.reduce((result, timeObj) => {
     if (result) return result;
 
     const { infoText, numOfSeconds } = timeObj;
@@ -80,7 +79,8 @@ function addSections(json) {
                                <h1>The New York Times News</h1>
                                <h3>${section}</h3></header>
                                <div class='flexbox-container'>
-                                 ${arrSections.reduce((result, el) => result + createSection(el),'')}</div>
+                               ${arrSections.reduce((result, el) => result + createSection(el),
+                                                    '')}</div>
                              ${createFooter(copyright)}`;
 }
 
